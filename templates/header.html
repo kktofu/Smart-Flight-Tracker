@@ -1,0 +1,67 @@
+<!-- templates/search.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flight Price Checker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Smart Flight Tracker</a>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="mb-4 text-center">航班價格查詢</h3>
+
+                    <form method="POST" action="{{ url_for('home') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            <p class="form-label">{{ form.From.label }} </p>
+                            {{form.From(class="form-control",placeholder= "例如：TPE")}}
+                            {% for error in form.From.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="form-label">{{ form.To.label }} </p>
+                            {{form.To(class="form-control",placeholder= "例如：NRT")}}
+                            {% for error in form.To.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="form-label">{{ form.Date.label }} </p>
+                            {{form.Date(class="form-control",placeholder= "例如：YYYY/MM/DD - YYYY/MM/DD")}}
+                            {% for error in form.Date.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="form-label">{{ form.Class_name.label }} </p>
+                            {{form.Class_name(class="form-select")}}
+                        </div>
+
+                        <div>
+                            {{form.Submit(class="btn btn-primary w-100")}}
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
