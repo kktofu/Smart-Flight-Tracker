@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,SelectField
 from wtforms.validators import DataRequired,Regexp
 
-class CreateFlightFrom(FlaskForm):
+class CreateFlightForm(FlaskForm):
     From = StringField("出發地(IATA Code)", validators=[DataRequired(),Regexp(r'^[A-Z]{3}$',message="IATA Code 必須是三個大寫英文，例如 TPE")])
     To = StringField("目的地(IATA Code)", validators=[DataRequired(),Regexp(r'^[A-Z]{3}$',message="IATA Code 必須是三個大寫英文，例如 NRT")])
     Date = StringField("旅行日期", validators=[DataRequired(),
