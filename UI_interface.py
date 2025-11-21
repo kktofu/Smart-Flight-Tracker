@@ -22,6 +22,7 @@ class FlightForm(db.Model):
     To: Mapped[str] = mapped_column(String(100))
     Date: Mapped[str] = mapped_column(String(100))
     Class_name: Mapped[str] = mapped_column(String(100))
+    Email: Mapped[str] = mapped_column(String(100))
 
 with app.app_context():
     db.create_all()

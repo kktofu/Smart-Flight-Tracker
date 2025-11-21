@@ -49,6 +49,14 @@
                         </div>
 
                         <div class="mb-3">
+                            <p class="form-label">{{ form.Email.label }} </p>
+                            {{form.Email(class="form-control",placeholder= "請輸入電子郵件地址")}}
+                            {% for error in form.Email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
                             <p class="form-label">{{ form.Class_name.label }} </p>
                             {{form.Class_name(class="form-select")}}
                         </div>
