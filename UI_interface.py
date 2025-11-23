@@ -44,5 +44,9 @@ def home():
         return render_template("index.html",form=form)
     return render_template("index.html",form=form)
 
+@app.route('/record')
+def record():
+    return render_template("record.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
