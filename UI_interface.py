@@ -31,10 +31,18 @@ with app.app_context():
 def home():
     form = CreateFlightForm()
     if form.validate_on_submit():
-        data = form.To.data
-        print(data)
-        return render_template("header.html",form=form)
-    return render_template("header.html",form=form)
+        data = FlightForm(
+            From=form.From.data,
+            To=form.To.data,
+            Date=form.Date.data,
+            Class_name=form.Class_name.data,
+            Email=form.Email.data
+        )
+        db.session.add(data)
+        db.session.commit()
+
+        return render_template("index.html",form=form)
+    return render_template("index.html",form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
