@@ -9,6 +9,6 @@ class CreateFlightForm(FlaskForm):
     Date = StringField("旅行日期", validators=[DataRequired(),
         Regexp(r'^\d{4}/\d{2}/\d{2} - \d{4}/\d{2}/\d{2}$',
         message="日期格式必須是：YYYY/MM/DD - YYYY/MM/DD")])
-    Class_name = SelectField("選擇艙等", validators=[DataRequired()],choices=[('2,經濟艙','經濟艙'),('3,豪華經濟艙','豪華經濟艙')])
+    Class_name = SelectField("選擇艙等", validators=[DataRequired()],choices=[('eco,經濟艙','經濟艙'),('ecoPremium,豪華經濟艙','豪華經濟艙')])
     Email = StringField("Email", validators=[DataRequired(), Email(message="請輸入正確的電子郵件")])
     Submit = SubmitField("查詢票價")
