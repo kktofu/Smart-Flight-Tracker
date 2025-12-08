@@ -1,8 +1,9 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Float
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column,relationship
+from sqlalchemy import Integer, String, Float,ForeignKey
 from forms import CreateFlightForm
+from scraping import FlightScraper
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -24,6 +25,20 @@ class FlightForm(db.Model):
     Class_name: Mapped[str] = mapped_column(String(100))
     Email: Mapped[str] = mapped_column(String(100))
 
+    tickets = relationship("Ticket", back_populates="flight")
+
+class Ticket(db.Model):
+    __tablename__ = "tickets"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    flight_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("flights_form.id"))
+    flight_no: Mapped[str] = mapped_column(String(100))
+    price: Mapped[int] = mapped_column(Integer)
+    depart_time: Mapped[str] = mapped_column(String(100))
+    arrive_time: Mapped[str] = mapped_column(String(100))
+    duration: Mapped[str] = mapped_column(String(100))
+
+    flight = relationship("FlightForm", back_populates="tickets")
+
 with app.app_context():
     db.create_all()
 
@@ -41,7 +56,16 @@ def home():
         db.session.add(data)
         db.session.commit()
 
-        return render_template("index.html",form=form)
+        scraper = FlightScraper()
+        departure_price,destination_price = scraper.run_selenium_price_scraper(
+            From=data.From,
+            To=data.To,
+            Date=data.Date,
+            Class_name=data.Class_name.split(",")[1],
+            class_level=data.Class_name.split(",")[0]
+        )
+
+        return redirect(url_for('record'))
     return render_template("index.html",form=form)
 
 @app.route('/record')

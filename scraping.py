@@ -9,8 +9,8 @@ URL ="https://www.starlux-airlines.com/zh-TW/booking/book-flight/search-a-flight
 # From = "TPE"
 # To = "NRT"
 # Date = "2025/11/25 - 2025/12/03"
-Class_name = "經濟艙"
-class_level = "eco"
+# Class_name = "經濟艙"
+# class_level = "eco"
 
 class FlightScraper:
     def __init__(self):
@@ -19,7 +19,7 @@ class FlightScraper:
         self.driver = webdriver.Chrome(chrome_options)
         self.wait = WebDriverWait(self.driver, 5)
 
-    def run_selenium_price_scraper(self,From,To,Date):
+    def run_selenium_price_scraper(self,From,To,Date,Class_name,class_level):
         self.driver.get(URL)
 
         cookie_accept = self.driver.find_element(By.XPATH,
@@ -47,7 +47,11 @@ class FlightScraper:
         # 輸入日期
         date = self.driver.find_element(By.CSS_SELECTOR, value='[data-qa="qa-datetime-date"]')
         date.click()
+        date.click()
         date.send_keys(Date)
+
+        close_button = self.wait.until(ec.presence_of_element_located((By.CSS_SELECTOR, '[class="flex justify-between items-center m-1 ml-auto"]')))
+        close_button.click()
 
         # 選擇人數和艙等
         passenger = self.driver.find_element(By.CSS_SELECTOR, value='[data-qa="qa-ddl-paxAndCabin"]')
@@ -137,7 +141,7 @@ class FlightScraper:
 
         return from_best_info, to_best_info
 
-start = FlightScraper()
-price1, price2 = start.run_selenium_price_scraper(From="TPE", To="NRT", Date="2025/11/27 - 2025/12/03",)
-print(price1)
-print(price2)
+# start = FlightScraper()
+# price1, price2 = start.run_selenium_price_scraper(From="TPE", To="NRT", Date="2025/12/09 - 2025/12/11",Class_name = "經濟艙", class_level = "eco")
+# print(price1)
+# print(price2)
