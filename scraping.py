@@ -142,6 +142,6 @@ class FlightScraper:
         return from_best_info, to_best_info
 
 # start = FlightScraper()
-# price1, price2 = start.run_selenium_price_scraper(From="TPE", To="NRT", Date="2025/12/09 - 2025/12/11",Class_name = "經濟艙", class_level = "eco")
+# price1, price2 = start.run_selenium_price_scraper(From="TPE", To="NRT", Date="2025/12/18 - 2025/12/20",Class_name = "經濟艙", class_level = "eco")
 # print(price1)
 # print(price2)
