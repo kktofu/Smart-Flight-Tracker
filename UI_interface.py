@@ -96,8 +96,16 @@ def home():
 
 @app.route('/record')
 def record():
-    flights = db.session.execute(db.select(FlightForm)).scalars().all()
-    return render_template("record.html",flights=flights)
+    tickets = db.session.execute(db.select(Ticket)).scalars().all()
+    return render_template("record.html",tickets=tickets)
+
+@app.route("/delete/<int:flight_id>")
+def delete_ticket(flight_id):
+    post_to_delete = db.get_or_404(Ticket, flight_id)
+    db.session.delete(post_to_delete)
+    db.session.commit()
+    return redirect(url_for('record'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
