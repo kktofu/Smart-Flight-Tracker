@@ -1,44 +1,18 @@
 from flask import Flask,render_template,request,redirect,url_for
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column,relationship
-from sqlalchemy import Integer, String, Float,ForeignKey
+from models import db, FlightForm, Ticket
+from flask_apscheduler import APScheduler
 from forms import CreateFlightForm
 from scraping import FlightScraper
+from jobs import daily_flight_check
+import datetime
+import os
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config["SECRET_KEY"] = "my_super_secret_key"
-
-class Base(DeclarativeBase):
-  pass
-db = SQLAlchemy(model_class=Base)
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+
 db.init_app(app)
-
-class FlightForm(db.Model):
-    __tablename__ = "flights_form"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    From: Mapped[str] = mapped_column(String(100))
-    To: Mapped[str] = mapped_column(String(100))
-    Date: Mapped[str] = mapped_column(String(100))
-    Class_name: Mapped[str] = mapped_column(String(100))
-    Email: Mapped[str] = mapped_column(String(100))
-
-    tickets = relationship("Ticket", back_populates="flight")
-
-class Ticket(db.Model):
-    __tablename__ = "tickets"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    flight_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("flights_form.id"))
-    direction: Mapped[str] = mapped_column(String(20))
-    flight_no: Mapped[str] = mapped_column(String(100))
-    price: Mapped[int] = mapped_column(Integer)
-    depart_time: Mapped[str] = mapped_column(String(100))
-    arrive_time: Mapped[str] = mapped_column(String(100))
-    duration: Mapped[str] = mapped_column(String(100))
-
-    flight = relationship("FlightForm", back_populates="tickets")
 
 with app.app_context():
     db.create_all()
@@ -105,6 +79,23 @@ def delete_ticket(flight_id):
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for('record'))
+
+
+scheduler = APScheduler()
+
+
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    scheduler.init_app(app)
+    scheduler.start()
+
+    scheduler.add_job(
+        id="daily_flight_check",
+        func=daily_flight_check,
+        args=[app],
+        trigger="cron",
+        hour=18,
+        minute=45
+    )
 
 
 if __name__ == "__main__":
