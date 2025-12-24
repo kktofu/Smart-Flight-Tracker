@@ -13,6 +13,8 @@ class FlightForm(db.Model):
     To: Mapped[str] = mapped_column(String(100))
     Date: Mapped[str] = mapped_column(String(100))
     Class_name: Mapped[str] = mapped_column(String(100))
+    go_last_lowest_price: Mapped[int] = mapped_column(Integer, nullable=True)
+    back_last_lowest_price: Mapped[int] = mapped_column(Integer, nullable=True)
     Email: Mapped[str] = mapped_column(String(100))
 
     tickets = relationship("Ticket", back_populates="flight")

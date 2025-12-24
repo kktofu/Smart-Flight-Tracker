@@ -14,9 +14,7 @@ URL ="https://www.starlux-airlines.com/zh-TW/booking/book-flight/search-a-flight
 
 class FlightScraper:
     def __init__(self):
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_experimental_option("detach", True)
-        self.driver = webdriver.Chrome(chrome_options)
+        self.driver = webdriver.Chrome()
         self.wait = WebDriverWait(self.driver, 5)
 
     def run_selenium_price_scraper(self,From,To,Date,Class_name,class_level):
@@ -139,9 +137,6 @@ class FlightScraper:
         time.sleep(3)
         to_best_info = get_cheapest_economy()
 
+        self.driver.quit()
         return from_best_info, to_best_info
 
-# start = FlightScraper()
-# price1, price2 = start.run_selenium_price_scraper(From="TPE", To="NRT", Date="2025/12/18 - 2025/12/20",Class_name = "經濟艙", class_level = "eco")
-# print(price1)
-# print(price2)

@@ -4,13 +4,14 @@ from flask_apscheduler import APScheduler
 from forms import CreateFlightForm
 from scraping import FlightScraper
 from jobs import daily_flight_check
-import datetime
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
 app = Flask(__name__)
 app.config["DEBUG"] = True
-app.config["SECRET_KEY"] = "my_super_secret_key"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI")
 
 db.init_app(app)
 
@@ -93,8 +94,8 @@ if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
         func=daily_flight_check,
         args=[app],
         trigger="cron",
-        hour=18,
-        minute=45
+        hour=22,
+        minute=54
     )
 
 
